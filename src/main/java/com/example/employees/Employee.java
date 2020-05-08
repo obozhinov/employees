@@ -1,5 +1,7 @@
 package com.example.employees;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,8 +11,11 @@ public class Employee {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private Long SSN;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
     private Date start_date;
     private Date end_date;
