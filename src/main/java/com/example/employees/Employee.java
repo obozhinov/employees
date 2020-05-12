@@ -3,6 +3,7 @@ package com.example.employees;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -13,9 +14,9 @@ public class Employee {
     private Long id;
     @NotNull
     private Long SSN;
-    @NotNull
+    @NotBlank(message = "First name is required!")
     private String firstname;
-    @NotNull
+    @NotBlank(message = "Last name is required!")
     private String lastname;
     private Date start_date;
     private Date end_date;
@@ -23,6 +24,13 @@ public class Employee {
     private Date updated_at;
 
     public Employee() {
+    }
+
+    public Employee(Long id, @NotBlank(message = "SSN is required!") Long SSN, @NotBlank(message = "First name is required!") String firstname, @NotBlank(message = "Last name is required!") String lastname) {
+        this.id = id;
+        this.SSN = SSN;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public Long getId() {
