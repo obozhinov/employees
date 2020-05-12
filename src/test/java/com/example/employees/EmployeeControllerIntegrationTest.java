@@ -1,6 +1,5 @@
 package com.example.employees;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,21 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,10 +34,21 @@ public class EmployeeControllerIntegrationTest {
     private static final ObjectMapper om = new ObjectMapper();
 
     @Autowired
+    private WebApplicationContext context;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private EmployeeRepository mockRepository;
+
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+//                .apply(springSecurity())
+                .build();
+    }
 
     @WithMockUser("USER")
     @Test
@@ -70,7 +75,7 @@ public class EmployeeControllerIntegrationTest {
         mockMvc.perform(get("/employee/5")).andExpect(status().isNotFound());
     }
 
-    @WithMockUser("USER")
+    @WithMockUser("ADMIN")
     @Test
     public void create_employee_OK() throws Exception {
         //setup
@@ -78,10 +83,10 @@ public class EmployeeControllerIntegrationTest {
         when(mockRepository.save(employee)).thenReturn(employee);
 
         mockMvc.perform(post("/employee").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(employee)))
-                .andExpect(status().isCreated());
-//                .andExpect(jsonPath("$.firstname", is("Olya")))
-//                .andExpect(jsonPath("$.lastname", is("Bozhinov")))
-//                .andExpect(jsonPath("$.ssn", is(777777777)));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstname", is("Olya")))
+                .andExpect(jsonPath("$.lastname", is("Bozhinov")))
+                .andExpect(jsonPath("$.ssn", is(777777777)));
 
     }
 }
