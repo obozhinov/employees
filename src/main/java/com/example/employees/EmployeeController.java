@@ -4,6 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -31,5 +36,10 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
+
+    @GetMapping("/findall")
+    public Collection<Employee> findAllEmployees() {
+        return new ArrayList<Employee>(repo.findAll());
     }
 }

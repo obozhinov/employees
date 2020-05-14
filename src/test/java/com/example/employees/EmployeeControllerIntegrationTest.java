@@ -80,7 +80,7 @@ public class EmployeeControllerIntegrationTest {
     public void create_employee_OK() throws Exception {
         //setup
         Employee employee = new Employee(1L, 777777777L, "Olya", "Bozhinov");
-        when(mockRepository.save(employee)).thenReturn(employee);
+        when(mockRepository.save(any(Employee.class))).thenReturn(employee);
 
         mockMvc.perform(post("/employee").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(employee)))
                 .andExpect(status().isCreated())
