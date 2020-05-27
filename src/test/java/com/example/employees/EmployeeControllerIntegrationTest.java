@@ -1,6 +1,11 @@
 package com.example.employees;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
+import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
+import io.restassured.response.ResponseOptions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -89,4 +97,24 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(jsonPath("$.ssn", is(777777777)));
 
     }
+
+//    @Test
+//    public void validate_contractEmployeeCreation() throws Exception {
+//        // given:
+//        MockMvcRequestSpecification request = given()
+//                .header("Content-Type", "application/json")
+//                .body("{\"SSN\":\"777777777\",\"firstname\":John,\"lastname\":Doe}");
+//
+//        // when:
+//        ResponseOptions<MockMvcResponse> response = given().spec(request)
+//                .put("/employee");
+//
+//        // then:
+//        assertThat(response.statusCode()).isEqualTo(201);
+//
+//        DocumentContext parsedJson = JsonPath.parse(response.getBody().asString());
+//
+//        assert(parsedJson.read(
+//                JsonPath.compile("$.SSN")).equals("777777777"));
+//    }
 }

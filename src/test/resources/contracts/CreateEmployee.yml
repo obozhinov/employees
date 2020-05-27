@@ -1,0 +1,18 @@
+request:
+  method: POST
+  url: /employee
+  body:
+    SSN: 777777777
+    firstname: John
+    lastname: Doe
+  headers:
+    Content-Type: application/json
+response:
+  status: 201
+  body:
+    id: 1
+    SSN: 777777777
+    firstname: John
+    lastname: Doe
+  headers:
+    Content-Type: application/json;charset=UTF-8
